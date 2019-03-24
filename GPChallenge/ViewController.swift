@@ -20,9 +20,48 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     let albumCellId = "albumCellId"
     
+    var artistsArray: [String] = []
+    
+    var AlbumsArray: [String] = []
+    
+    var artisArtworkArray: [UIImage] = []
+    
+    let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/apple-music/coming-soon/all/20/explicit.json")
+
+    var newResizedImage: UIImage = UIImage()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        // Serialize to JSON
+        let jsonData = loadJSON(fileURL: url!)
+        let json = JSON(jsonData!)
+        
+        // Getting an array of string from a JSON Array
+        let arrayOfString = json["feed"]["results"].arrayValue.map({$0["artistName"]})
+        let arrayOfSongNames = json["feed"]["results"].arrayValue.map({$0["name"]})
+        let artworkURL = json["feed"]["results"].arrayValue.map({$0["artworkUrl100"]})
+        
+        for obj in arrayOfString {
+            //    print(obj.stringValue)
+            artistsArray.append(obj.stringValue)
+        }
+        
+        for obj in arrayOfSongNames {
+            //    print(obj.stringValue)
+            AlbumsArray.append(obj.stringValue)
+        }
+        
+        for obj in artworkURL{
+            
+            newResizedImage = UIImage(url: URL(string: obj.stringValue))!
+            
+            newResizedImage = resizeImage(image: newResizedImage, targetSize: CGSize.init(width: 40, height: 40))
+            
+            artisArtworkArray.append(newResizedImage)
+            
+        }
         
         setupViews()
         setupTableView()
@@ -30,10 +69,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func setupViews() {
-        navigationItem.title = "Apple Music - iTunes"
-        navigationController?.navigationBar.barTintColor = UIColor(r: 0, g: 255, b: 198)
+        navigationItem.title = "Apple Music"
+        navigationController?.navigationBar.barTintColor = UIColor(r: 0, g: 100, b: 198)
         
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray,
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white,
                                                                    NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)]
     }
     
@@ -57,16 +96,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: albumCellId, for: indexPath) as! BandCell
-        //cell.pictureImageView.image = artisArtworkArray[indexPath.item]
-        //cell.titleLabel.text = AlbumsArray[indexPath.item] + " - " + artistsArray[indexPath.item]
-        
-        
-        if indexPath.section == 1 {
-         //   cell.pictureImageView.image = UIImage(named: songsArray[indexPath.item].image!)
-         //   cell.titleLabel.text = artistsArray[indexPath.item]
-        }
+        cell.pictureImageView.image = artisArtworkArray[indexPath.item]
+        cell.titleLabel.text = AlbumsArray[indexPath.item] + " - " + artistsArray[indexPath.item]
         
         return cell
     }
@@ -81,6 +113,51 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //}
         return "Albums - Coming Soon"
     }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / image.size.width
+        let heightRatio = targetSize.height / image.size.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+    
+    private func loadJSON(fileURL:URL)->[String : Any]? {
+        // Parse the JSON
+        do {
+            // Create a string out of the file contents
+            let contents = try String(contentsOf: fileURL) // use contentsOfFile for strings
+            // Turn it into data to feed JSONSerialization class
+            let data     = contents.data(using: String.Encoding.utf8)
+            // Attempt to turn it into JSON, or show error
+            let json:[String:Any]? = try? JSONSerialization.jsonObject(with: data!, options: []) as! [String : Any]
+            
+            return json
+            
+        } catch {
+            Swift.print("Error parsing json")
+            return nil
+        }
+    }
+
     
 }
 
@@ -133,3 +210,16 @@ class BandCell: UITableViewCell {
     
 }
 
+extension UIImage {
+    convenience init?(url: URL?) {
+        guard let url = url else { return nil }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            self.init(data: data)
+        } catch {
+            print("Cannot load image from url: \(url) with error: \(error)")
+            return nil
+        }
+    }
+}
