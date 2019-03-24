@@ -79,7 +79,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func setupTableView() {
         tableVIew.delegate = self
         tableVIew.dataSource = self
-        tableVIew.register(BandCell.self, forCellReuseIdentifier: albumCellId)
+        tableVIew.register(AlbumCell.self, forCellReuseIdentifier: albumCellId)
         
         view.addSubview(tableVIew)
         tableVIew.setAnchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
@@ -96,7 +96,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: albumCellId, for: indexPath) as! BandCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: albumCellId, for: indexPath) as! AlbumCell
         cell.pictureImageView.image = artisArtworkArray[indexPath.item]
         cell.titleLabel.text = AlbumsArray[indexPath.item] + " - " + artistsArray[indexPath.item]
         
@@ -161,7 +161,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
 }
 
-class BandCell: UITableViewCell {
+class AlbumCell: UITableViewCell {
     
     let cellView: UIView = {
         let view = UIView()
