@@ -15,6 +15,7 @@
 		F7070330224721AC0086DCB5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F707032E224721AC0086DCB5 /* LaunchScreen.storyboard */; };
 		F707033B224721AD0086DCB5 /* GPChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F707033A224721AD0086DCB5 /* GPChallengeTests.swift */; };
 		F7070346224721AD0086DCB5 /* GPChallengeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7070345224721AD0086DCB5 /* GPChallengeUITests.swift */; };
+		F7070354224728CD0086DCB5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7070353224728CD0086DCB5 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		F7070341224721AD0086DCB5 /* GPChallengeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPChallengeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7070345224721AD0086DCB5 /* GPChallengeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPChallengeUITests.swift; sourceTree = "<group>"; };
 		F7070347224721AD0086DCB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F7070353224728CD0086DCB5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +95,6 @@
 				B6E199F7E68FFE7B34DFA14F /* Pods-GPChallenge.debug.xcconfig */,
 				745C3C539B12ED2387D778A9 /* Pods-GPChallenge.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -123,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				F7070325224721AA0086DCB5 /* AppDelegate.swift */,
+				F7070353224728CD0086DCB5 /* Extensions.swift */,
 				F7070327224721AA0086DCB5 /* ViewController.swift */,
 				F7070329224721AA0086DCB5 /* Main.storyboard */,
 				F707032C224721AC0086DCB5 /* Assets.xcassets */,
@@ -331,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7070328224721AA0086DCB5 /* ViewController.swift in Sources */,
+				F7070354224728CD0086DCB5 /* Extensions.swift in Sources */,
 				F7070326224721AA0086DCB5 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
